@@ -3,6 +3,9 @@ import random
 from ..classes import *
 
 
+MAXIMUM_ITERATIONS_STATION_LOG = 10000
+
+
 class Station(Station):
     def __init__(self, num, medium):
         super().__init__(num, medium)
@@ -23,7 +26,7 @@ class Station(Station):
     def feedback(self, collision):
         """Gets called by simulation when station attempted to send data (backoff count = 0) as a feedback wether it worked or not.
         """
-        # if a collision occured, increase contention window size until cw_end is reached
+        # if a collision occurred, increase contention window size until cw_end is reached
         if collision is True:
             self.cw_size = min(((self.cw_size + 1) * 2) - 1, self.medium.cw_end)
         # otherwise, on successful transmission, reset contention window size
@@ -83,7 +86,8 @@ class Simulator:
                 self.simulation.collisions_ap += 1
 
             self.simulation.frame_log.append(frame)
-            self.simulation.station_log.append(self.stations)
+            if len(self.simulation.station_log) < MAXIMUM_ITERATIONS_STATION_LOG:
+                self.simulation.station_log.append(self.stations)
             self._iteration_output()
 
             # clear everything up for next iteration
