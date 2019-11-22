@@ -53,6 +53,11 @@ class AccessPoint(AP):
 
         self.synchronized_stations = new_stations
 
+    def _send_ack(self, station, backoff_counter, backoff_stage):
+        """This function is solely extracted from _vba to overwrite it in the future. That's a good reason to do it, right?
+        """
+        station.ack(backoff_counter, backoff_stage)
+
     def _vba(self, station):
         backoff_stage = 0
 
@@ -69,7 +74,7 @@ class AccessPoint(AP):
 
                 # ... and therefore get his own backoff assigned by Virtual Backoff Algorithm
                 # old: timed_backoff = (self.medium.iteration - self.last_iteration) % self.cw_size + backoff
-                station.ack(backoff_counter, backoff_stage)
+                self._send_ack(station, backoff_counter, backoff_stage)
                 break
             else:
                 # double the contention window (increase backoff stage) due to virtual collision

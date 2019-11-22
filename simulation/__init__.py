@@ -9,7 +9,8 @@ class Scheme(Enum):
     DCF_BASIC = 1
     DCF_NO_BACKOFF_MEMORY = 2
     DCF_GLOBAL_CW = 3
-    CRB = 4
+    CRB = 4,
+    TBRI = 5  # 3bRI, 3 bit of reservation information, three bit scheduling
 
 
 def run(scheme=Scheme.DCF_BASIC, num_stations=50, num_iterations=1000, cw_start=15, cw_end=255):
@@ -21,6 +22,8 @@ def run(scheme=Scheme.DCF_BASIC, num_stations=50, num_iterations=1000, cw_start=
         from .schemes.dcf_globalcw import Simulator
     elif scheme is Scheme.CRB:
         from .schemes.crb import Simulator
+    elif scheme is Scheme.TBRI:
+        from.schemes.tbri import Simulator
     else:
         print('Scheme \'{}\' not implemented!'.format(scheme))
         return

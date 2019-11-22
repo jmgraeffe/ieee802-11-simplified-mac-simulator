@@ -6,7 +6,7 @@ import simulation as simulator
 
 # to destroy the randomness, while still being random
 import random
-random.seed(2)
+# random.seed(2)
 
 
 def export_station_log_csv(scheme, simulation, file_name):
@@ -26,9 +26,9 @@ def export_station_log_csv(scheme, simulation, file_name):
 
 if __name__ == '__main__':
     scheme = simulator.Scheme.DCF_BASIC
-    simulation = simulator.run(scheme, num_stations=3, cw_start=1, num_iterations=1000)
+    # simulation = simulator.run(scheme, num_stations=7, cw_start=3, num_iterations=5000)
     # simulation = simulator.run(scheme, num_stations=25, cw_start=63, cw_end=63, num_iterations=5000)
-    # simulation = simulator.run(scheme, num_stations=15, num_iterations=25000)
+    simulation = simulator.run(scheme, num_stations=12, cw_start=7, num_iterations=300000)
 
     print('-' * 64)
     print('collisions_ap\t\t\t\t= {}'.format(simulation.collisions_ap))
