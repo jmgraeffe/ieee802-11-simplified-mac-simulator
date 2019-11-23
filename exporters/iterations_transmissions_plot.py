@@ -3,10 +3,13 @@ import matplotlib.pyplot as plt
 
 def export(simulations, file_path, marker_styles=None):
     schemes = []
+    xticks = []
     scheme_xs = {}
     scheme_ys = {}
 
     for num_iterations, scheme_simulations in simulations.items():
+        xticks.append(num_iterations)
+
         for scheme, simulations in scheme_simulations.items():
             if scheme not in scheme_xs.keys():
                 schemes.append(scheme)
@@ -25,5 +28,7 @@ def export(simulations, file_path, marker_styles=None):
     plt.grid()
     plt.xlabel('number of successful transmissions')
     plt.ylabel('number of iterations')
+    plt.xticks(xticks)
     plt.legend(fancybox=False)
     plt.savefig(file_path)
+    plt.clf()
