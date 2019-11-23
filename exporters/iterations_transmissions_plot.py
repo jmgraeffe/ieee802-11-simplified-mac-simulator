@@ -26,9 +26,10 @@ def export(simulations, file_path, marker_styles=None):
             plt.plot(scheme_xs[scheme], scheme_ys[scheme], label='{}'.format(scheme), **marker_styles[scheme])
 
     plt.grid()
-    plt.xlabel('number of successful transmissions')
-    plt.ylabel('number of iterations')
+    plt.xlabel('number of iterations')
+    plt.ylabel('number of successful transmissions')
     plt.xticks(xticks)
+    plt.xscale('log')
     plt.legend(fancybox=False)
     plt.savefig(file_path)
     plt.clf()

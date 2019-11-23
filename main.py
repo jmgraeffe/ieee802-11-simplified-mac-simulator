@@ -1,7 +1,7 @@
 import logging
 import sys
 from datetime import datetime
-from multiprocessing import Process, cpu_count
+from multiprocessing import cpu_count
 
 from common_functions import ensure_dir
 import simulation as simulator
@@ -17,12 +17,12 @@ from exporters import station_collision_plot, stations_transmissions_plot, itera
 
 def station_plots(path):
     schemes_markers = {
-        simulator.Scheme.DCF_BASIC: dict(marker='o', linestyle='-'),
-        simulator.Scheme.CRB: dict(marker='^', linestyle='-'),
-        simulator.Scheme.TBRI: dict(marker='s', linestyle='-'),
+        simulator.Scheme.DCF_BASIC: dict(marker='s', linestyle=':'),
+        simulator.Scheme.CRB: dict(marker='o', linestyle='--'),
+        simulator.Scheme.TBRI: dict(marker='^', linestyle='-'),
     }
 
-    range_stations = range(10, 50 + 1)
+    range_stations = range(10, 50 + 1, 5)
     # range_stations = range(10, 15)
 
     simulations = simulator.run_multiple(schemes_markers.keys(), range_stations, 1000000)
@@ -34,25 +34,26 @@ def station_plots(path):
 def iteration_plots(path):
     schemes_markers = {
         simulator.Scheme.DCF_BASIC: dict(marker='s', linestyle=':'),
-        simulator.Scheme.CRB: dict(marker='o', linestyle='-'),
-        simulator.Scheme.TBRI: dict(marker='^', linestyle='--'),
+        simulator.Scheme.CRB: dict(marker='o', linestyle='--'),
+        simulator.Scheme.TBRI: dict(marker='^', linestyle='-'),
     }
 
     stations_schemes_markers = {
         20: {
-            simulator.Scheme.CRB: dict(marker='', linestyle='-'),
-            simulator.Scheme.TBRI: dict(marker='', linestyle='--'),
+            simulator.Scheme.CRB: dict(marker='', linestyle='-', linewidth=0.5),
+            simulator.Scheme.TBRI: dict(marker='', linestyle='--', linewidth=1.5),
         },
         30: {
-            simulator.Scheme.CRB: dict(marker='', linestyle='-.'),
-            simulator.Scheme.TBRI: dict(marker='', linestyle=':'),
+            simulator.Scheme.CRB: dict(marker='', linestyle='-.', linewidth=0.5),
+            simulator.Scheme.TBRI: dict(marker='', linestyle=':', linewidth=1.5),
         }
     }
 
     range_stations = range(20, 30 + 1, 10)
-    simulations = {300: None, 3000: None, 30000: None, 300000: None}
+    range_iterations = [300] + list(range(3000, 300000 + 1, 3000))
 
-    for num_iterations in simulations.keys():
+    simulations = {}
+    for num_iterations in range_iterations:
         simulations[num_iterations] = simulator.run_multiple(schemes_markers.keys(), range_stations, num_iterations)
 
     iterations_transmissions_plot.export(simulations, ensure_dir(path + 'iterations_transmissions_plot.pdf'), schemes_markers)
@@ -64,11 +65,5 @@ if __name__ == '__main__':
     print(cpu_count())
     path = 'output/{}/'.format(datetime.now().strftime('%Y-%m-%d_%H-%M-%S'))
 
-    p1 = Process(target=station_plots, args=(path,))
-    p2 = Process(target=iteration_plots, args=(path,))
-
-    p1.start()
-    p2.start()
-
-    p1.join()
-    p2.join()
+    station_plots(path)
+    iteration_plots(path)

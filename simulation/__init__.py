@@ -10,6 +10,17 @@ class Scheme(Enum):
     CRB = 4,
     TBRI = 5  # 3bRI, 3 bit of reservation information, three bit scheduling
 
+    @classmethod
+    def to_human_name(cls, scheme):
+        if scheme is cls.DCF_BASIC:
+            return 'DCF'
+        elif scheme is cls.CRB:
+            return 'CRB'
+        elif scheme is cls.TBRI:
+            return '3bRI'
+        else:
+            return str(scheme)
+
 
 def run(scheme=Scheme.DCF_BASIC, num_stations=50, num_iterations=1000, cw_start=15, cw_end=255):
     if scheme is Scheme.DCF_BASIC:
