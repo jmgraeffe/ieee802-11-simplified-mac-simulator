@@ -1,5 +1,6 @@
 import random
 
+from .. import Scheme
 from .crb import Simulation as CrbSimulation, Station as CrbStation, Medium as CrbMedium, Simulator as CrbSimulator, AccessPoint as CrbAccessPoint
 
 
@@ -83,7 +84,7 @@ class Simulator(CrbSimulator):
     def __init__(self, num_stations, num_iterations, cw_start, cw_end):
         self.num_stations = num_stations
         self.num_iterations = num_iterations
-        self.simulation = CrbSimulation()
+        self.simulation = CrbSimulation(Scheme.TBRI, num_stations, num_iterations, cw_start, cw_end)
         self.medium = Medium(cw_start, cw_end, self)
         self.stations = self.generate_stations(num_stations)
         self.medium.stations = self.stations  # dirty injection

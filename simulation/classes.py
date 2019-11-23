@@ -6,7 +6,15 @@ class Simulation:
         def append(self, obj):
             super().append(copy.deepcopy(obj))
 
-    def __init__(self):
+    def __init__(self, scheme, num_stations, num_iterations, cw_start, cw_end):
+        # not changing
+        self.scheme = scheme
+        self.num_stations = num_stations
+        self.num_iterations = num_iterations
+        self.cw_start = cw_start
+        self.cw_end = cw_end
+
+        # changing
         self.frame_log = Simulation._Log()  # history of what happened in a time slot (e.g. data sent by station x, or a collision, or nothing)
         self.station_log = Simulation._Log()  # history of station states (backoff counter etc.)
         self.collisions_stations = 0  # collisions over all stations, e.g. if you've multiple stations there can be multiple collisions per time slot

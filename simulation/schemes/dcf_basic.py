@@ -2,7 +2,7 @@ import random
 import logging
 
 from ..classes import *
-
+from .. import Scheme
 
 MAXIMUM_ITERATIONS_STATION_LOG = 10000
 
@@ -46,7 +46,7 @@ class Simulator:
     def __init__(self, num_stations, num_iterations, cw_start, cw_end):
         self.num_stations = num_stations
         self.num_iterations = num_iterations
-        self.simulation = Simulation()
+        self.simulation = Simulation(Scheme.DCF_BASIC, num_stations, num_iterations, cw_start, cw_end)
         self.medium = Medium(cw_start, cw_end)
         self.stations = self.generate_stations(num_stations)
 

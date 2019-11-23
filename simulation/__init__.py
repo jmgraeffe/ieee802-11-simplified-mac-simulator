@@ -1,4 +1,5 @@
 from enum import Enum
+from multiprocessing import Process, Queue, cpu_count, Pool
 import logging
 
 
@@ -13,10 +14,10 @@ class Scheme(Enum):
 def run(scheme=Scheme.DCF_BASIC, num_stations=50, num_iterations=1000, cw_start=15, cw_end=255):
     if scheme is Scheme.DCF_BASIC:
         from .schemes.dcf_basic import Simulator
-    elif scheme is Scheme.DCF_NO_BACKOFF_MEMORY:
-        from .schemes.dcf_nobackoffmemory import Simulator
-    elif scheme is Scheme.DCF_GLOBAL_CW:
-        from .schemes.dcf_globalcw import Simulator
+    # elif scheme is Scheme.DCF_NO_BACKOFF_MEMORY:
+    #     from .schemes.dcf_nobackoffmemory import Simulator
+    # elif scheme is Scheme.DCF_GLOBAL_CW:
+    #     from .schemes.dcf_globalcw import Simulator
     elif scheme is Scheme.CRB:
         from .schemes.crb import Simulator
     elif scheme is Scheme.TBRI:
@@ -36,13 +37,24 @@ def run(scheme=Scheme.DCF_BASIC, num_stations=50, num_iterations=1000, cw_start=
     return simulation
 
 
+def run_process(args):
+    return run(*args)
+
+
 def run_multiple(schemes, range_stations, num_iterations=1000, cw_start=15, cw_end=255):
     simulations = {}
+    process_args = []
 
     for scheme in schemes:
         simulations[scheme] = {}
 
         for num_stations in range_stations:
-            simulations[scheme][num_stations] = run(scheme, num_stations, num_iterations, cw_start, cw_end)
+            process_args.append((scheme, num_stations, num_iterations, cw_start, cw_end))
+
+    with Pool(processes=int(3 * cpu_count() / 4)) as pool:
+        results = pool.map(run_process, process_args)
+
+    for result in results:
+        simulations[result.scheme][result.num_stations] = result
 
     return simulations

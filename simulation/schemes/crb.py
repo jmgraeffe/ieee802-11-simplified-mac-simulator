@@ -2,7 +2,8 @@ import math
 import random
 import logging
 
-from ..classes import AccessPoint as AP, Simulation as OldSimulation
+from .. import Scheme
+from ..classes import AccessPoint as AP, Simulation as DefaultSimulation
 from .dcf_basic import Station as DcfStation, Medium as DcfMedium, Simulator as DcfSimulator
 
 
@@ -134,9 +135,9 @@ class Medium(DcfMedium):
         self.ap = AccessPoint(self, cw_start, cw_end)
 
 
-class Simulation(OldSimulation):
-    def __init__(self):
-        super().__init__()
+class Simulation(DefaultSimulation):
+    def __init__(self, scheme, num_stations, num_iterations, cw_start, cw_end):
+        super().__init__(scheme, num_stations, num_iterations, cw_start, cw_end)
         self.num_synchronized_nodes = []
 
 
@@ -144,7 +145,7 @@ class Simulator(DcfSimulator):
     def __init__(self, num_stations, num_iterations, cw_start, cw_end):
         self.num_stations = num_stations
         self.num_iterations = num_iterations
-        self.simulation = Simulation()
+        self.simulation = Simulation(Scheme.CRB, num_stations, num_iterations, cw_start, cw_end)
         self.medium = Medium(cw_start, cw_end)
         self.stations = self.generate_stations(num_stations)
 
