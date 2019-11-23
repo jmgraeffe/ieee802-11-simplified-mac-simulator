@@ -61,9 +61,7 @@ class Simulator:
 
         return stations
 
-    def _iteration_output(self):
-        frame = self.simulation.frame_log[-1]
-
+    def _iteration_output(self, frame):
         if isinstance(frame, CollisionFrame) is True:
             logging.info('collisions_stations({}) = {}'.format(self.medium.iteration, frame.collisions))
         else:
@@ -86,10 +84,10 @@ class Simulator:
                 self.simulation.collisions_stations += frame.collisions
                 self.simulation.collisions_ap += 1
 
-            self.simulation.frame_log.append(frame)
-            if len(self.simulation.station_log) < MAXIMUM_ITERATIONS_STATION_LOG:
-                self.simulation.station_log.append(self.stations)
-            self._iteration_output()
+            # self.simulation.frame_log.append(frame)
+            # if len(self.simulation.station_log) < MAXIMUM_ITERATIONS_STATION_LOG:
+            #     self.simulation.station_log.append(self.stations)
+            self._iteration_output(frame)
 
             # clear everything up for next iteration
             self.medium.next_iteration()

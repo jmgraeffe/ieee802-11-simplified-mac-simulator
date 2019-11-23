@@ -151,7 +151,7 @@ class Simulator(DcfSimulator):
     def generate_station(self, num):
         return Station(num, self.medium)
 
-    def _iteration_output(self):
-        super()._iteration_output()
+    def _iteration_output(self, frame):
+        super()._iteration_output(frame)
         self.simulation.num_synchronized_nodes.append(len(self.medium.ap.synchronized_stations))
         logging.info('#SCNs({}) = {}'.format(self.medium.iteration, len(self.medium.ap.synchronized_stations)))
