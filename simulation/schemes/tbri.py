@@ -1,7 +1,6 @@
 import random
 
-from ..classes import Simulation
-from .crb import Station as CrbStation, Medium as CrbMedium, Simulator as CrbSimulator, AccessPoint as CrbAccessPoint
+from .crb import Simulation as CrbSimulation, Station as CrbStation, Medium as CrbMedium, Simulator as CrbSimulator, AccessPoint as CrbAccessPoint
 
 
 class AccessPoint(CrbAccessPoint):
@@ -19,7 +18,6 @@ class AccessPoint(CrbAccessPoint):
             # if backoff_counter == 1: first slot will be reserved
             # if backoff_counter == 3: third slot will be reserved
             # => WARNING, no first slot anomaly in this simulation!
-            print((backoff_counter, station.num))
             if backoff_counter >= 0 and backoff_counter <= 2:
                 # True represents reserved slot
                 slots[backoff_counter] = True
@@ -62,9 +60,6 @@ class Station(CrbStation):
             super().tick()
 
     def ack(self, intended_receiver, next_backoff, backoff_stage, slots):
-        print(self.num)
-        print(slots)
-        print('---')
         # simulate that we can't hear the first 13 bits of CRB info (would be encrypted in reality)
         if self == intended_receiver:
             # if we're the intended receiver, we can synchronize
@@ -88,7 +83,7 @@ class Simulator(CrbSimulator):
     def __init__(self, num_stations, num_iterations, cw_start, cw_end):
         self.num_stations = num_stations
         self.num_iterations = num_iterations
-        self.simulation = Simulation()
+        self.simulation = CrbSimulation()
         self.medium = Medium(cw_start, cw_end, self)
         self.stations = self.generate_stations(num_stations)
         self.medium.stations = self.stations  # dirty injection

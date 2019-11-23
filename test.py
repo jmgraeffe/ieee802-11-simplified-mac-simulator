@@ -1,4 +1,6 @@
+import sys
 from datetime import datetime
+import logging
 
 from common_functions import ensure_dir
 import simulation as simulator
@@ -25,16 +27,12 @@ def export_station_log_csv(scheme, simulation, file_name):
 
 
 if __name__ == '__main__':
-    scheme = simulator.Scheme.DCF_BASIC
+    logging.basicConfig(level=logging.DEBUG, stream=sys.stdout, format='%(message)s')
+
+    scheme = simulator.Scheme.CRB
     # simulation = simulator.run(scheme, num_stations=7, cw_start=3, num_iterations=5000)
     # simulation = simulator.run(scheme, num_stations=25, cw_start=63, cw_end=63, num_iterations=5000)
-    simulation = simulator.run(scheme, num_stations=12, cw_start=7, num_iterations=300000)
-
-    print('-' * 64)
-    print('collisions_ap\t\t\t\t= {}'.format(simulation.collisions_ap))
-    print('collisions_stations\t\t\t= {}'.format(simulation.collisions_stations))
-    print('successful_transmissions\t= {}'.format(simulation.successful_transmissions))
-    print('-' * 64)
+    simulation = simulator.run(scheme, num_stations=20, num_iterations=300000)
 
     path = 'output/{}/{}_station_log.csv'.format(datetime.now().strftime('%Y-%m-%d_%H-%M-%S'), scheme)
     export_station_log_csv(scheme, simulation, ensure_dir(path))

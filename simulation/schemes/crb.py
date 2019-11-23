@@ -1,7 +1,8 @@
 import math
 import random
+import logging
 
-from ..classes import AccessPoint as AP, Simulation
+from ..classes import AccessPoint as AP, Simulation as OldSimulation
 from .dcf_basic import Station as DcfStation, Medium as DcfMedium, Simulator as DcfSimulator
 
 
@@ -35,11 +36,11 @@ class AccessPoint(AP):
         for backoff_counter, station in self.synchronized_stations.items():
             cw_size = self.calculate_cw_size(station.backoff_stage)
             new_backoff_counter = (backoff_counter - elapsed_iterations) % (cw_size + 1)
-            print(backoff_counter)
-            print(elapsed_iterations)
-            print(cw_size)
-            print(new_backoff_counter)
-            print('-----')
+            logging.debug(backoff_counter)
+            logging.debug(elapsed_iterations)
+            logging.debug(cw_size)
+            logging.debug(new_backoff_counter)
+            logging.debug('-----')
             new_stations[int(new_backoff_counter)] = station
 
         self.synchronized_stations = new_stations
@@ -80,10 +81,10 @@ class AccessPoint(AP):
                 # double the contention window (increase backoff stage) due to virtual collision
                 if cw_size < self.cw_end:
                     backoff_stage += 1
-                    print('backoff_stage set to {}'.format(backoff_stage + 1))
+                    logging.debug('backoff_stage set to {}'.format(backoff_stage + 1))
 
         self.last_iteration = self.medium.iteration
-        print(self.medium.iteration)
+        logging.debug(self.medium.iteration)
 
 
 class Station(DcfStation):
@@ -133,6 +134,12 @@ class Medium(DcfMedium):
         self.ap = AccessPoint(self, cw_start, cw_end)
 
 
+class Simulation(OldSimulation):
+    def __init__(self):
+        super().__init__()
+        self.num_synchronized_nodes = []
+
+
 class Simulator(DcfSimulator):
     def __init__(self, num_stations, num_iterations, cw_start, cw_end):
         self.num_stations = num_stations
@@ -146,4 +153,5 @@ class Simulator(DcfSimulator):
 
     def _iteration_output(self):
         super()._iteration_output()
-        print('#SCNs({}) = {}'.format(self.medium.iteration, len(self.medium.ap.synchronized_stations)))
+        self.simulation.num_synchronized_nodes.append(len(self.medium.ap.synchronized_stations))
+        logging.info('#SCNs({}) = {}'.format(self.medium.iteration, len(self.medium.ap.synchronized_stations)))

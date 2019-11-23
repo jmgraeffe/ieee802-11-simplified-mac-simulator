@@ -1,8 +1,5 @@
 from enum import Enum
-
-"""TODO
--
-"""
+import logging
 
 
 class Scheme(Enum):
@@ -25,12 +22,18 @@ def run(scheme=Scheme.DCF_BASIC, num_stations=50, num_iterations=1000, cw_start=
     elif scheme is Scheme.TBRI:
         from.schemes.tbri import Simulator
     else:
-        print('Scheme \'{}\' not implemented!'.format(scheme))
+        logging.error('Scheme \'{}\' not implemented!'.format(scheme))
         return
 
     simulation = Simulator(num_stations, num_iterations, cw_start, cw_end).run()
+
+    logging.info('-' * 64)
+    logging.info('collisions_ap\t\t\t\t= {}'.format(simulation.collisions_ap))
+    logging.info('collisions_stations\t\t\t= {}'.format(simulation.collisions_stations))
+    logging.info('successful_transmissions\t= {}'.format(simulation.successful_transmissions))
+    logging.info('-' * 64)
+
     return simulation
-    # print(simulation.log)
 
 
 def run_multiple(schemes, range_stations, num_iterations=1000, cw_start=15, cw_end=255):
@@ -40,8 +43,6 @@ def run_multiple(schemes, range_stations, num_iterations=1000, cw_start=15, cw_e
         simulations[scheme] = {}
 
         for num_stations in range_stations:
-            print('BLA')
-            print(num_stations)
             simulations[scheme][num_stations] = run(scheme, num_stations, num_iterations, cw_start, cw_end)
 
     return simulations

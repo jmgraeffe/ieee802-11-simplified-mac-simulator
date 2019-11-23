@@ -6,12 +6,13 @@ class Simulation:
         def append(self, obj):
             super().append(copy.deepcopy(obj))
 
-    frame_log = _Log()  # history of what happened in a time slot (e.g. data sent by station x, or a collision, or nothing)
-    station_log = _Log()  # history of station states (backoff counter etc.)
-    collisions_stations = 0  # collisions over all stations, e.g. if you've multiple stations there can be multiple collisions per time slot
-    collisions_ap = 0  # collisions as seen from the AP, so even if multiple stations are trying to send, there will be only one collision
-    successful_transmissions = 0  # since collisions do not occur even when no data is transmitted in a time slot at all, this is also an important factor
-    # you could alternatively calculate that afterwards by counting the None values in frame_log by iterating over it, but for performance we just do it on the go
+    def __init__(self):
+        self.frame_log = Simulation._Log()  # history of what happened in a time slot (e.g. data sent by station x, or a collision, or nothing)
+        self.station_log = Simulation._Log()  # history of station states (backoff counter etc.)
+        self.collisions_stations = 0  # collisions over all stations, e.g. if you've multiple stations there can be multiple collisions per time slot
+        self.collisions_ap = 0  # collisions as seen from the AP, so even if multiple stations are trying to send, there will be only one collision
+        self.successful_transmissions = 0  # since collisions do not occur even when no data is transmitted in a time slot at all, this is also an important factor
+        # you could alternatively calculate that afterwards by counting the None values in frame_log by iterating over it, but for performance we just do it on the go
 
 
 class Medium:

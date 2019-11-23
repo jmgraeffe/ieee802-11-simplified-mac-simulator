@@ -1,4 +1,5 @@
 import random
+import logging
 
 from ..classes import *
 
@@ -64,9 +65,9 @@ class Simulator:
         frame = self.simulation.frame_log[-1]
 
         if isinstance(frame, CollisionFrame) is True:
-            print('collisions_stations({}) = {}'.format(self.medium.iteration, frame.collisions))
+            logging.info('collisions_stations({}) = {}'.format(self.medium.iteration, frame.collisions))
         else:
-            print('collisions_stations({}) = 0'.format(self.medium.iteration))
+            logging.info('collisions_stations({}) = 0'.format(self.medium.iteration))
 
     def run(self):
         # we start with a contention phase, which is a simplification of the simulation
