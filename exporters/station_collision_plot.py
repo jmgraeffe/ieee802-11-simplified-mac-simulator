@@ -23,8 +23,8 @@ def export(simulations, file_path, marker_styles=None):
             plt.plot(xs, ys, label=Scheme.to_human_name(scheme), **marker_styles[scheme])
 
     plt.grid()
-    plt.xlabel('number of stations')
-    plt.ylabel('number of collisions on AP')
+    plt.xlabel('Number of Stations')
+    plt.ylabel('Number of Collisions on AP')
     plt.xticks(xticks)
     plt.legend(fancybox=False)
     plt.savefig(file_path)

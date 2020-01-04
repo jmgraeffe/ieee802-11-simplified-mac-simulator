@@ -23,9 +23,10 @@ def export(simulations, file_path, marker_styles=None):
             plt.plot(xs, ys, label=Scheme.to_human_name(scheme), **marker_styles[scheme])
 
     plt.grid()
-    plt.xlabel('number of stations')
-    plt.ylabel('number of successful transmissions')
+    plt.xlabel('Number of Stations')
+    plt.ylabel('Number of Successful Transmissions')
     plt.xticks(xticks)
     plt.legend(fancybox=False)
+    plt.tight_layout()
     plt.savefig(file_path)
     plt.clf()
