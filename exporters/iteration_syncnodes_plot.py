@@ -18,8 +18,8 @@ def export(simulations, file_path, marker_styles=None):
                     plt.plot(xs, ys, label='{}, {} stations'.format(scheme, num_stations), **marker_styles[num_stations][scheme])
 
     plt.grid()
-    plt.xlabel('iteration (time slot)')
-    plt.ylabel('number of SCN\'s')
-    plt.legend(fancybox=False)
-    plt.savefig(file_path)
+    plt.xlabel('Iteration [Time Slots]')
+    plt.ylabel('Number of SCN\'s')
+    plt.legend(fancybox=True, framealpha=1.0)
+    plt.savefig(file_path, bbox_inches='tight')
     plt.clf()

@@ -26,6 +26,6 @@ def export(simulations, file_path, marker_styles=None):
     plt.xlabel('Number of Stations')
     plt.ylabel('Number of Collisions on AP')
     plt.xticks(xticks)
-    plt.legend(fancybox=False)
-    plt.savefig(file_path)
+    plt.legend(fancybox=True, framealpha=1.0)
+    plt.savefig(file_path, bbox_inches='tight')
     plt.clf()
