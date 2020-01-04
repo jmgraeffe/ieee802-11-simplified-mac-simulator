@@ -52,20 +52,23 @@ def run_process(args):
     return run(*args)
 
 
-def run_multiple(schemes, range_stations, num_iterations=1000, cw_start=15, cw_end=255):
+def run_multiple(range_iterations, schemes, range_stations, cw_start=15, cw_end=255):
     simulations = {}
     process_args = []
 
-    for scheme in schemes:
-        simulations[scheme] = {}
+    for num_iterations in range_iterations:
+        simulations[num_iterations] = {}
 
-        for num_stations in range_stations:
-            process_args.append((scheme, num_stations, num_iterations, cw_start, cw_end))
+        for scheme in schemes:
+            simulations[num_iterations][scheme] = {}
+
+            for num_stations in range_stations:
+                process_args.append((scheme, num_stations, num_iterations, cw_start, cw_end))
 
     with Pool(processes=int(3 * cpu_count() / 4)) as pool:
         results = pool.map(run_process, process_args)
 
     for result in results:
-        simulations[result.scheme][result.num_stations] = result
+        simulations[result.num_iterations][result.scheme][result.num_stations] = result
 
     return simulations
