@@ -17,7 +17,7 @@ def export(simulations, file_path, marker_styles=None):
                 scheme_ys[scheme] = []
 
             scheme_xs[scheme].append(num_iterations)
-            scheme_ys[scheme].append(simulations[20].successful_transmissions)  # TODO: remove hardcoded 20, bad style :(
+            scheme_ys[scheme].append(simulations[16].successful_transmissions)  # TODO: remove hardcoded 16, bad style :(
 
     for scheme in schemes:
         if marker_styles is None:
@@ -28,8 +28,8 @@ def export(simulations, file_path, marker_styles=None):
     plt.grid()
     plt.xlabel('number of iterations')
     plt.ylabel('number of successful transmissions')
-    plt.xticks(xticks)
-    plt.xscale('log')
+    # plt.xticks(xticks)
+    # plt.xscale('log')
     plt.legend(fancybox=False)
     plt.savefig(file_path)
     plt.clf()
