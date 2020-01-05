@@ -48,26 +48,29 @@ def iteration_plots(path):
     }
 
     stations_schemes_markers = {
-        8: {
-            simulator.Scheme.CRB: dict(marker='', linestyle='-', linewidth=1.5),
-            simulator.Scheme.TBRI: dict(marker='', linestyle='--', linewidth=1.5),
+        10: {
+            simulator.Scheme.CRB: dict(marker='', linestyle='-'),
+            simulator.Scheme.TBRI: dict(marker='', linestyle='--'),
         },
         16: {
-            simulator.Scheme.CRB: dict(marker='', linestyle='-.', linewidth=1.5),
-            simulator.Scheme.TBRI: dict(marker='', linestyle=':', linewidth=1.5),
+            simulator.Scheme.CRB: dict(marker='', linestyle='-'),
+            simulator.Scheme.TBRI: dict(marker='', linestyle='--'),
         }
     }
 
+    # range_stations = [10]
     range_stations = [16]
     # range_stations = range(8, 16 + 1, 8)
     range_iterations = [300] + list(range(3000, 300000 + 1, 3000))
+    # range_iterations = [1500]
+    # range_iterations = [15000]
     # num_simulations = 1
     num_simulations = 16
 
     simulations = simulator.run_multiple_averaged(num_simulations, range_iterations, schemes_markers.keys(), range_stations)
 
     iterations_transmissions_plot.export(simulations, ensure_dir(path + 'iterations_transmissions_plot.pdf'), schemes_markers)
-    # iteration_syncnodes_plot.export(simulations[15000], ensure_dir(path + 'iteration_syncnodes_plot.pdf'), stations_schemes_markers)
+    # iteration_syncnodes_plot.export(simulations[range_iterations[0]], ensure_dir(path + 'iteration_syncnodes_plot.pdf'), stations_schemes_markers)
 
 
 if __name__ == '__main__':
@@ -76,7 +79,8 @@ if __name__ == '__main__':
     path = 'output/{}/'.format(datetime.now().strftime('%Y-%m-%d_%H-%M-%S'))
 
     import random
-    random.seed(2)
+    # random.seed(2)
+    random.seed(3050)
 
     # station_plots(path)
     iteration_plots(path)
