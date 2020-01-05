@@ -1,6 +1,8 @@
 from enum import Enum
-from multiprocessing import Process, Queue, cpu_count, Pool
+from multiprocessing import cpu_count, Pool
 import logging
+import collections
+import time
 
 
 class Scheme(Enum):
@@ -53,14 +55,14 @@ def run_process(args):
 
 
 def run_multiple(range_iterations, schemes, range_stations, cw_start=15, cw_end=255):
-    simulations = {}
+    simulations = collections.OrderedDict()
     process_args = []
 
     for num_iterations in range_iterations:
-        simulations[num_iterations] = {}
+        simulations[num_iterations] = collections.OrderedDict()
 
         for scheme in schemes:
-            simulations[num_iterations][scheme] = {}
+            simulations[num_iterations][scheme] = collections.OrderedDict()
 
             for num_stations in range_stations:
                 process_args.append((scheme, num_stations, num_iterations, cw_start, cw_end))
@@ -72,3 +74,32 @@ def run_multiple(range_iterations, schemes, range_stations, cw_start=15, cw_end=
         simulations[result.num_iterations][result.scheme][result.num_stations] = result
 
     return simulations
+
+
+def run_multiple_averaged(num_simulations, range_iterations, schemes, range_stations, cw_start=15, cw_end=255):
+    start = time.time()
+    first = run_multiple(range_iterations, schemes, range_stations, cw_start, cw_end)
+    end = time.time()
+
+    print("1. simulation finished in {} seconds!".format(end - start))
+
+    # add statistics of all missing simulations to the first one
+    for num_simulation in range(num_simulations - 1):
+        start = time.time()
+        simulations = run_multiple(range_iterations, schemes, range_stations, cw_start, cw_end)
+        end = time.time()
+
+        print("{}. simulation finished in {} seconds!".format(num_simulation + 2, end - start))
+
+        for num_iterations, simulations1 in simulations.items():
+            for scheme, simulations2 in simulations1.items():
+                for num_stations, simulation in simulations2.items():
+                    first[num_iterations][scheme][num_stations].add(simulation)
+
+    # divide everything to get average
+    for num_iterations, simulations1 in first.items():
+        for scheme, simulations2 in simulations1.items():
+            for num_stations, simulation in simulations2.items():
+                first[num_iterations][scheme][num_stations].divide_by(num_simulations)
+
+    return first

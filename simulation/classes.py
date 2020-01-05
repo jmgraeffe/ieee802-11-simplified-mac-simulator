@@ -22,6 +22,18 @@ class Simulation:
         self.successful_transmissions = 0  # since collisions do not occur even when no data is transmitted in a time slot at all, this is also an important factor
         # you could alternatively calculate that afterwards by counting the None values in frame_log by iterating over it, but for performance we just do it on the go
 
+    def add(self, simulation):
+        self.frame_log = None  # this is obviously not available anymore then
+        self.station_log = None  # this is obviously not available anymore then
+        self.collisions_stations += simulation.collisions_stations
+        self.collisions_ap += simulation.collisions_ap
+        self.successful_transmissions += simulation.successful_transmissions
+
+    def divide_by(self, num):
+        self.collisions_stations /= num
+        self.collisions_ap /= num
+        self.successful_transmissions /= num
+
 
 class Medium:
     def __init__(self, ap):
