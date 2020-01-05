@@ -1,5 +1,7 @@
 import matplotlib.pyplot as plt
 
+from simulation import Scheme
+
 
 def export(simulations, file_path, marker_styles=None):
     for scheme, num_stations_simulations in simulations.items():
@@ -13,9 +15,9 @@ def export(simulations, file_path, marker_styles=None):
                     ys.append(num_synchronized_nodes)
 
                 if marker_styles is None:
-                    plt.plot(xs, ys, 'o-', label='{}, {} stations'.format(scheme, num_stations))
+                    plt.plot(xs, ys, 'o-', label='{}, {} stations'.format(Scheme.to_human_name(scheme), num_stations))
                 else:
-                    plt.plot(xs, ys, label='{}, {} stations'.format(scheme, num_stations), **marker_styles[num_stations][scheme])
+                    plt.plot(xs, ys, label='{}, {} stations'.format(Scheme.to_human_name(scheme), num_stations), **marker_styles[num_stations][scheme])
 
     plt.grid()
     plt.xlabel('Iteration [Time Slots]')

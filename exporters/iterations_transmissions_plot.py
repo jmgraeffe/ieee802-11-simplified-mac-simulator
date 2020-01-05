@@ -1,5 +1,7 @@
 import matplotlib.pyplot as plt
 
+from simulation import Scheme
+
 
 def export(simulations, file_path, marker_styles=None):
     schemes = []
@@ -21,9 +23,9 @@ def export(simulations, file_path, marker_styles=None):
 
     for scheme in schemes:
         if marker_styles is None:
-            plt.plot(scheme_xs[scheme], scheme_ys[scheme], 'o-', label='{}'.format(scheme))
+            plt.plot(scheme_xs[scheme], scheme_ys[scheme], 'o-', label='{}'.format(Scheme.to_human_name(scheme)))
         else:
-            plt.plot(scheme_xs[scheme], scheme_ys[scheme], label='{}'.format(scheme), **marker_styles[scheme])
+            plt.plot(scheme_xs[scheme], scheme_ys[scheme], label='{}'.format(Scheme.to_human_name(scheme)), **marker_styles[scheme])
 
     plt.grid()
     plt.xlabel('Number of Iterations')
